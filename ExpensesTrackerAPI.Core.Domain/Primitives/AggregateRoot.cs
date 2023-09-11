@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ExpensesTrackerAPI.Core.Domain.Primitives;
 
-namespace ExpensesTrackerAPI.Core.Domain.Primitives
+public abstract class AggregateRoot : Entity
 {
-    public abstract class AggregateRoot : Entity
+    private readonly List<DomainEvent> _domainEvents = new();
+    protected AggregateRoot(Guid id) : base(id)
     {
-        protected AggregateRoot(Guid id) : base(id)
-        {
-        }
+    }
+
+    public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents;
+
+    public void Raise(DomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
     }
 }
