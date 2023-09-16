@@ -1,5 +1,6 @@
 ﻿using ExpensesTrackerAPI.Core.Domain.Entities.Categories;
 using ExpensesTrackerAPI.Core.Domain.Entities.Transactions.Enums;
+using ExpensesTrackerAPI.Core.Domain.Entities.Transactions.ValueObject;
 using ExpensesTrackerAPI.Core.Domain.Entities.TransactionTypes;
 using ExpensesTrackerAPI.Core.Domain.Primitives;
 
@@ -10,7 +11,7 @@ public class Transaction : AggregateRoot
     private Transaction(
         Guid id,
         string description,
-        decimal amount,
+        Money amount,
         PaymentMethod paymentMethod,
         Guid transactionId,
         Guid categoryId,
@@ -29,7 +30,7 @@ public class Transaction : AggregateRoot
     }
 
     public string Description { get; private set; }
-    public decimal Amount { get; private set; }
+    public Money Amount { get; private set; }
     public PaymentMethod PaymentMethod { get; private set; }
     public Guid TransactionId { get; private set; }
     public Guid CategoryId { get; private set; }
@@ -43,7 +44,7 @@ public class Transaction : AggregateRoot
     public static Transaction Create(
         Guid id,
         string description,
-        decimal amount,
+        Money amount,
         PaymentMethod paymentMethod,
         Guid transactionId,
         Guid categoryId,
