@@ -1,10 +1,23 @@
-﻿using ExpensesTrackerAPI.Core.Domain.Primitives;
+﻿using ExpensesTrackerAPI.Core.Domain.Entities.Categories;
+using ExpensesTrackerAPI.Core.Domain.Entities.Transactions.Enums;
+using ExpensesTrackerAPI.Core.Domain.Entities.TransactionTypes;
+using ExpensesTrackerAPI.Core.Domain.Primitives;
 
-namespace ExpensesTrackerAPI.Core.Domain.Entities;
+namespace ExpensesTrackerAPI.Core.Domain.Entities.Transactions;
 
 public class Transaction : AggregateRoot
 {
-    private Transaction(Guid id, string description, decimal amount, PaymentMethod paymentMethod, Guid transactionId, Guid categoryId, DateTime transactionDate, Guid userId) : base(id)
+    private Transaction(
+        Guid id,
+        string description,
+        decimal amount,
+        PaymentMethod paymentMethod,
+        Guid transactionId,
+        Guid categoryId,
+        DateTime transactionDate,
+        Guid userId
+    )
+        : base(id)
     {
         Description = description;
         Amount = amount;
@@ -14,6 +27,7 @@ public class Transaction : AggregateRoot
         TransactionDate = transactionDate;
         UserId = userId;
     }
+
     public string Description { get; private set; }
     public decimal Amount { get; private set; }
     public PaymentMethod PaymentMethod { get; private set; }
@@ -26,7 +40,16 @@ public class Transaction : AggregateRoot
     public TransactionType? TransactionType { get; private set; }
     public Category? Category { get; private set; }
 
-    public static Transaction Create(Guid id, string description, decimal amount, PaymentMethod paymentMethod, Guid transactionId, Guid categoryId, DateTime transactionDate, Guid userId)
+    public static Transaction Create(
+        Guid id,
+        string description,
+        decimal amount,
+        PaymentMethod paymentMethod,
+        Guid transactionId,
+        Guid categoryId,
+        DateTime transactionDate,
+        Guid userId
+    )
     {
         return new(
             id,
@@ -37,7 +60,6 @@ public class Transaction : AggregateRoot
             categoryId,
             transactionDate,
             userId
-            );
+        );
     }
-
 }

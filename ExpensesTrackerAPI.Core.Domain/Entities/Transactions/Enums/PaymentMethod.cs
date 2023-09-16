@@ -1,4 +1,4 @@
-﻿namespace ExpensesTrackerAPI.Core.Domain.Entities;
+﻿namespace ExpensesTrackerAPI.Core.Domain.Entities.Transactions.Enums;
 
 public enum PaymentMethod
 {

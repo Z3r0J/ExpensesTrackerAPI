@@ -1,6 +1,7 @@
-﻿using ExpensesTrackerAPI.Core.Domain.Primitives;
+﻿using ExpensesTrackerAPI.Core.Domain.Entities.Transactions;
+using ExpensesTrackerAPI.Core.Domain.Primitives;
 
-namespace ExpensesTrackerAPI.Core.Domain.Entities;
+namespace ExpensesTrackerAPI.Core.Domain.Entities.TransactionTypes;
 
 public sealed class TransactionType : AggregateRoot
 {

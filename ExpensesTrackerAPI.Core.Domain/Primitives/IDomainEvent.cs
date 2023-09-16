@@ -2,6 +2,4 @@
 
 namespace ExpensesTrackerAPI.Core.Domain.Primitives;
 
-internal interface IDomainEvent : INotification
-{
-}
+internal interface IDomainEvent : INotification { }
