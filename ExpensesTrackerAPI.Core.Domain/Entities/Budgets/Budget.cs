@@ -1,4 +1,5 @@
-﻿using ExpensesTrackerAPI.Core.Domain.Entities.Budgets.ValueObject;
+﻿using ExpensesTrackerAPI.Core.Domain.Entities.Budgets.Events;
+using ExpensesTrackerAPI.Core.Domain.Entities.Budgets.ValueObject;
 using ExpensesTrackerAPI.Core.Domain.Entities.Transactions;
 using ExpensesTrackerAPI.Core.Domain.Entities.Transactions.Events;
 using ExpensesTrackerAPI.Core.Domain.Primitives;
@@ -9,8 +10,13 @@ public sealed class Budget : AggregateRoot
 {
     public List<Transaction> _transactions = new();
 
-    private Budget(Guid id)
-        : base(id) { }
+    private Budget(Guid id, string name, DateTime startDate, DateTime endDate)
+        : base(id)
+    {
+        Name = name;
+        StartDate = startDate;
+        EndDate = endDate;
+    }
 
     private Budget()
         : base() { }
@@ -26,6 +32,18 @@ public sealed class Budget : AggregateRoot
     {
         get => DateTime.UtcNow > EndDate || SavingGoal.GoalIsReached();
         private set { }
+    }
+
+    public static Budget Create(Guid id, string name, DateTime startDate, DateTime endDate)
+    {
+        Raise(new BudgetCreatedEvent(id));
+
+        return new(id, name, startDate, endDate);
+    }
+
+    public void SetSavingGoal(SavingGoal savingGoal)
+    {
+        SavingGoal = savingGoal;
     }
 
     public IEnumerable<Transaction> Transactions
