@@ -7,6 +7,8 @@ public abstract class Entity : IEquatable<Entity>
         Id = id;
     }
 
+    protected Entity() { }
+
     public Guid Id { get; private init; }
     public DateTime? CreatedOnUtc { get; set; }
     public DateTime? UpdateOnUtc { get; set; }

@@ -2,14 +2,17 @@
 
 public abstract class AggregateRoot : Entity
 {
-    private readonly List<DomainEvent> _domainEvents = new();
+    private static readonly List<DomainEvent> _domainEvents = new();
 
     protected AggregateRoot(Guid id)
         : base(id) { }
 
+    protected AggregateRoot()
+        : base() { }
+
     public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents;
 
-    public void Raise(DomainEvent domainEvent)
+    public static void Raise(DomainEvent domainEvent)
     {
         _domainEvents.Add(domainEvent);
     }
