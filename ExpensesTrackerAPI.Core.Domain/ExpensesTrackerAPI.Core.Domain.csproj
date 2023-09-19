@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Budgets\Enums\" />
+    <Folder Include="Entities\Users\Enums\" />
+    <Folder Include="Entities\Users\Events\" />
+    <Folder Include="Entities\Users\ValueObject\" />
   </ItemGroup>
 
 </Project>
