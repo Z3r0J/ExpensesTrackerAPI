@@ -48,6 +48,15 @@ public sealed class Account : AggregateRoot
         return new(id, name, userId, isActive, accountType);
     }
 
+    public void Update(string? name, bool? isActive, AccountType? accountType)
+    {
+        Name = name ?? Name;
+        IsActive = isActive ?? IsActive;
+        AccountType = accountType ?? AccountType;
+
+        Raise(new AccountUpdatedEvent(Id));
+    }
+
     public void SetAccountBalance(AccountBalanceInfo accountInformation)
     {
         Balance = accountInformation;
@@ -63,7 +72,7 @@ public sealed class Account : AggregateRoot
     {
         if (Balance.AmountReached())
         {
-            throw new InvalidOperationException("The goal is reached");
+            throw new InvalidOperationException("The amount is reached");
         }
 
         _transactions.Add(transaction);
@@ -71,12 +80,6 @@ public sealed class Account : AggregateRoot
         UpdateAccountAmount(transaction);
 
         Raise(new TransactionAddedEvent(transaction.Id));
-    }
-
-    public void UpdateAccount(string name, bool isActive)
-    {
-        Name = name;
-        IsActive = isActive;
     }
 
     public void InactivateAccount()
@@ -90,5 +93,7 @@ public sealed class Account : AggregateRoot
     {
         if (!Balance.AmountReached())
             Balance.UpdateCurrentAmount(transaction.TransactionType, transaction.Amount);
+
+        Raise(new AccountBalanceUpdatedEvent(Id));
     }
 }
