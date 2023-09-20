@@ -35,4 +35,12 @@ public sealed class Category : AggregateRoot
 
         return new(id, title, description);
     }
+
+    public void Update(string? title, string? description)
+    {
+        Title = title ?? Title;
+        Description = description ?? Description;
+
+        Raise(new CategoryUpdatedEvent(Id));
+    }
 }
