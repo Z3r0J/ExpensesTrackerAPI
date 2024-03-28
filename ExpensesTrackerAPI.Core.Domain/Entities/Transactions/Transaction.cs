@@ -2,25 +2,25 @@
 using ExpensesTrackerAPI.Core.Domain.Entities.Categories;
 using ExpensesTrackerAPI.Core.Domain.Entities.Transactions.Enums;
 using ExpensesTrackerAPI.Core.Domain.Entities.Transactions.ValueObject;
+using ExpensesTrackerAPI.Core.Domain.Entities.Users;
 using ExpensesTrackerAPI.Core.Domain.Primitives;
 
 namespace ExpensesTrackerAPI.Core.Domain.Entities.Transactions;
 
-public class Transaction : AggregateRoot
+public class Transaction : AggregateRoot<TransactionId>
 {
-    private Transaction()
-        : base() { }
+    private Transaction() { }
 
     private Transaction(
-        Guid id,
+        TransactionId id,
         string description,
         Money amount,
         PaymentMethod paymentMethod,
         TransactionType transactionType,
-        Guid accountId,
-        Guid categoryId,
+        AccountId accountId,
+        CategoryId categoryId,
         DateTime transactionDate,
-        Guid userId
+        UserId userId
     )
         : base(id)
     {
@@ -38,29 +38,28 @@ public class Transaction : AggregateRoot
     public Money Amount { get; private set; } = Money.Zero();
     public PaymentMethod PaymentMethod { get; private set; } = PaymentMethod.Cash;
     public TransactionType TransactionType { get; private set; } = TransactionType.Expense;
-    public Guid AccountId { get; private set; } = Guid.Empty;
-    public Guid CategoryId { get; private set; } = Guid.Empty;
+    public AccountId AccountId { get; private set; } = AccountId.Empty;
+    public CategoryId CategoryId { get; private set; } = CategoryId.Empty;
     public DateTime TransactionDate { get; private set; } = DateTime.UtcNow;
-    public Guid UserId { get; private set; } = Guid.Empty;
+    public UserId UserId { get; private set; } = UserId.Empty;
 
     // Navigation Properties
     public Category? Category { get; private set; }
     public Account? Account { get; private set; }
 
     public static Transaction Create(
-        Guid id,
         string description,
         Money amount,
         PaymentMethod paymentMethod,
         TransactionType transactionType,
-        Guid accountId,
-        Guid categoryId,
+        AccountId accountId,
+        CategoryId categoryId,
         DateTime transactionDate,
-        Guid userId
+        UserId userId
     )
     {
         return new(
-            id,
+            TransactionId.New,
             description,
             amount,
             paymentMethod,

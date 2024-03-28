@@ -1,10 +1,10 @@
 ﻿namespace ExpensesTrackerAPI.Core.Domain.Primitives;
 
-public abstract class AggregateRoot : Entity
+public abstract class AggregateRoot<TId> : Entity<TId>
 {
     private static readonly List<DomainEvent> _domainEvents = new();
 
-    protected AggregateRoot(Guid id)
+    protected AggregateRoot(TId id)
         : base(id) { }
 
     protected AggregateRoot()

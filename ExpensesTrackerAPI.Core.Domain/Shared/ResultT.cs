@@ -14,8 +14,8 @@ public class Result<TValue> : Result
 
     [NotNull]
     public TValue Value =>
-        IsSuccess
-            ? _value!
+        IsSuccess && _value is not null
+            ? _value
             : throw new InvalidOperationException("Cannot access value for a failed result");
 
     public static implicit operator Result<TValue>(TValue value) => Create(value);

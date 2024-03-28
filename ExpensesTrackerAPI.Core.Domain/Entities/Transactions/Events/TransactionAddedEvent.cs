@@ -4,9 +4,9 @@ namespace ExpensesTrackerAPI.Core.Domain.Entities.Transactions.Events;
 
 internal class TransactionAddedEvent : DomainEvent
 {
-    public Guid TransactionId { get; private set; } = Guid.Empty;
+    public TransactionId TransactionId { get; private set; }
 
-    public TransactionAddedEvent(Guid Id)
+    public TransactionAddedEvent(TransactionId Id)
     {
         TransactionId = Id;
     }

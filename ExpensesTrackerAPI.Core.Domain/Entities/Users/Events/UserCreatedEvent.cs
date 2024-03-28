@@ -2,13 +2,8 @@
 
 namespace ExpensesTrackerAPI.Core.Domain.Entities.Users.Events
 {
-    public class UserCreatedEvent : DomainEvent
+    public class UserCreatedEvent(UserId id) : DomainEvent
     {
-        public UserCreatedEvent(Guid id)
-        {
-            Id = id;
-        }
-
-        public Guid Id { get; private set; }
+        public UserId Id { get; private set; } = id;
     }
 }

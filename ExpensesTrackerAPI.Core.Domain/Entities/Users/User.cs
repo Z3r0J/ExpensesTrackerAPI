@@ -9,13 +9,13 @@ using ExpensesTrackerAPI.Core.Domain.Primitives;
 
 namespace ExpensesTrackerAPI.Core.Domain.Entities.Users;
 
-public class User : AggregateRoot
+public class User : AggregateRoot<UserId>
 {
-    private List<Transaction> _transactions = new();
-    private List<Account> _accounts = new();
+    private List<Transaction> _transactions = [];
+    private List<Account> _accounts = [];
 
-    public User(
-        Guid id,
+    private User(
+        UserId id,
         FullName fullName,
         Email email,
         Roles rol,
@@ -31,30 +31,29 @@ public class User : AggregateRoot
         Password = password;
     }
 
-    public FullName FullName { get; private set; } = new(string.Empty, string.Empty);
-    public Email Email { get; private set; } = Email.Empty();
-    public string UserName { get; private set; } = string.Empty;
-    public Roles Rol { get; private set; } = Roles.User;
-    public string Password { get; private set; } = string.Empty;
+    public FullName FullName { get; private set; }
+    public Email Email { get; private set; }
+    public string UserName { get; private set; }
+    public Roles Rol { get; private set; }
+    public string Password { get; private set; }
 
     // Navigation properties
 
     public IEnumerable<Transaction> Transactions
     {
-        get { return _transactions; }
-        private set { _transactions = (List<Transaction>)value; }
+        get => _transactions;
+        private set => _transactions = (List<Transaction>)value;
     }
 
     public IEnumerable<Account> Accounts
     {
-        get { return _accounts; }
-        private set { _accounts = (List<Account>)value; }
+        get => _accounts;
+        private set => _accounts = (List<Account>)value;
     }
 
     //Factory Methods
 
     public static User Create(
-        Guid id,
         FullName fullName,
         Email email,
         Roles rol,
@@ -62,6 +61,8 @@ public class User : AggregateRoot
         string password
     )
     {
+        var id = UserId.New;
+
         User user = new(id, fullName, email, rol, userName, password);
 
         Raise(new UserCreatedEvent(id));

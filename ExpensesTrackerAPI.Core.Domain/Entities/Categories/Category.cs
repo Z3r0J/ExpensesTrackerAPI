@@ -4,14 +4,13 @@ using ExpensesTrackerAPI.Core.Domain.Primitives;
 
 namespace ExpensesTrackerAPI.Core.Domain.Entities.Categories;
 
-public sealed class Category : AggregateRoot
+public sealed class Category : AggregateRoot<CategoryId>
 {
-    private List<Transaction> _transactions = new();
+    private List<Transaction> _transactions = [];
 
-    private Category()
-        : base() { }
+    private Category() { }
 
-    private Category(Guid id, string title, string description)
+    private Category(CategoryId id, string title, string description)
         : base(id)
     {
         Title = title;
@@ -25,13 +24,15 @@ public sealed class Category : AggregateRoot
 
     public IEnumerable<Transaction> Transactions
     {
-        get { return _transactions; }
-        private set { _transactions = (List<Transaction>)value; }
+        get => _transactions;
+        private set => _transactions = (List<Transaction>)value;
     }
 
-    public static Category Create(Guid id, string title, string description)
+    public static Category Create(string title, string description)
     {
-        Raise(new CategoryCreatedEvent(id));
+        var id = CategoryId.New;
+
+        Raise(new CategoryCreatedEvent(id.Id));
 
         return new(id, title, description);
     }
@@ -41,6 +42,6 @@ public sealed class Category : AggregateRoot
         Title = title ?? Title;
         Description = description ?? Description;
 
-        Raise(new CategoryUpdatedEvent(Id));
+        Raise(new CategoryUpdatedEvent(Id.Id));
     }
 }

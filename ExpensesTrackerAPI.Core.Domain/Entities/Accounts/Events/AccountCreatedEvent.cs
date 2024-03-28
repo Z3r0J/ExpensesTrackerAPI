@@ -1,12 +1,13 @@
-﻿using ExpensesTrackerAPI.Core.Domain.Primitives;
+﻿using ExpensesTrackerAPI.Core.Domain.Entities.Users;
+using ExpensesTrackerAPI.Core.Domain.Primitives;
 
 namespace ExpensesTrackerAPI.Core.Domain.Entities.Accounts.Events;
 
 public class AccountCreatedEvent : DomainEvent
 {
-    public Guid Id { get; private set; } = Guid.Empty;
+    public AccountId Id { get; private set; }
 
-    public AccountCreatedEvent(Guid id)
+    public AccountCreatedEvent(AccountId id)
     {
         Id = id;
     }

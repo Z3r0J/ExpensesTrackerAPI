@@ -3,15 +3,16 @@ using ExpensesTrackerAPI.Core.Domain.Entities.Accounts.Events;
 using ExpensesTrackerAPI.Core.Domain.Entities.Accounts.ValueObject;
 using ExpensesTrackerAPI.Core.Domain.Entities.Transactions;
 using ExpensesTrackerAPI.Core.Domain.Entities.Transactions.Events;
+using ExpensesTrackerAPI.Core.Domain.Entities.Users;
 using ExpensesTrackerAPI.Core.Domain.Primitives;
 
 namespace ExpensesTrackerAPI.Core.Domain.Entities.Accounts;
 
-public sealed class Account : AggregateRoot
+public sealed class Account : AggregateRoot<AccountId>
 {
-    public List<Transaction> _transactions = new();
+    private List<Transaction> _transactions = new();
 
-    private Account(Guid id, string name, Guid userId, bool isActive, AccountType accountType)
+    private Account(AccountId id, string name, UserId userId, bool isActive, AccountType accountType)
         : base(id)
     {
         Name = name;
@@ -20,29 +21,25 @@ public sealed class Account : AggregateRoot
         AccountType = accountType;
     }
 
-    private Account()
-        : base() { }
+    private Account() { }
 
     public string Name { get; private set; } = string.Empty;
-    public Guid UserId { get; private set; } = Guid.Empty;
+    public UserId UserId { get; private set; } = UserId.Empty;
     public bool IsActive { get; private set; } = true;
     public AccountType AccountType { get; private set; } = AccountType.None;
     public AccountBalanceInfo Balance { get; private set; } = AccountBalanceInfo.None;
 
-    public bool IsFull
-    {
-        get => Balance.AmountReached();
-        private set { }
-    }
+    public bool IsFull => Balance.AmountReached();
 
     public static Account Create(
-        Guid id,
         string name,
-        Guid userId,
+        UserId userId,
         bool isActive,
         AccountType accountType
     )
     {
+        var id = AccountId.New;
+
         Raise(new AccountCreatedEvent(id));
 
         return new(id, name, userId, isActive, accountType);
@@ -54,7 +51,7 @@ public sealed class Account : AggregateRoot
         IsActive = isActive ?? IsActive;
         AccountType = accountType ?? AccountType;
 
-        Raise(new AccountUpdatedEvent(Id));
+        Raise(new AccountUpdatedEvent(Id.Value));
     }
 
     public void SetAccountBalance(AccountBalanceInfo accountInformation)
@@ -65,7 +62,7 @@ public sealed class Account : AggregateRoot
     public IEnumerable<Transaction> Transactions
     {
         get => _transactions;
-        private set { _transactions = (List<Transaction>)value; }
+        private set => _transactions = (List<Transaction>)value;
     }
 
     public void AddTransaction(Transaction transaction)
@@ -86,7 +83,7 @@ public sealed class Account : AggregateRoot
     {
         IsActive = false;
 
-        Raise(new AccountInactivatedEvent(Id));
+        Raise(new AccountInactivatedEvent(Id.Value));
     }
 
     private void UpdateAccountAmount(Transaction transaction)
@@ -94,6 +91,6 @@ public sealed class Account : AggregateRoot
         if (!Balance.AmountReached())
             Balance.UpdateCurrentAmount(transaction.TransactionType, transaction.Amount);
 
-        Raise(new AccountBalanceUpdatedEvent(Id));
+        Raise(new AccountBalanceUpdatedEvent(Id.Value));
     }
 }

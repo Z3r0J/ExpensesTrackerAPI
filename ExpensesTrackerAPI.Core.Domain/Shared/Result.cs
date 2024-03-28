@@ -4,13 +4,17 @@ public class Result
 {
     protected internal Result(bool isSuccess, Error error)
     {
-        if (isSuccess && error != Error.None)
-            throw new InvalidOperationException("Invalid operation for successful result");
-        if (!isSuccess && error == Error.None)
-            throw new InvalidOperationException("Invalid operation for failed result");
-
-        IsSuccess = isSuccess;
-        Error = error;
+        switch (isSuccess)
+        {
+            case true when error != Error.None:
+                throw new InvalidOperationException("Invalid operation for successful result");
+            case false when error == Error.None:
+                throw new InvalidOperationException("Invalid operation for failed result");
+            default:
+                IsSuccess = isSuccess;
+                Error = error;
+                break;
+        }
     }
 
     public bool IsSuccess { get; }
