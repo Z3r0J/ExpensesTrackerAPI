@@ -32,7 +32,7 @@ public sealed class Category : AggregateRoot<CategoryId>
     {
         var id = CategoryId.New;
 
-        Raise(new CategoryCreatedEvent(id.Id));
+        Raise(new CategoryCreatedEvent(id.Value));
 
         return new(id, title, description);
     }
@@ -42,6 +42,6 @@ public sealed class Category : AggregateRoot<CategoryId>
         Title = title ?? Title;
         Description = description ?? Description;
 
-        Raise(new CategoryUpdatedEvent(Id.Id));
+        Raise(new CategoryUpdatedEvent(Id.Value));
     }
 }

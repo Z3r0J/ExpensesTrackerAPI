@@ -1,6 +1,6 @@
 ﻿namespace ExpensesTrackerAPI.Core.Domain.Entities.Users.ValueObject;
 
-public record FullName(string FirstName, string LastName)
+public record FullName(string? FirstName, string LastName)
 {
     public override string ToString()
     {

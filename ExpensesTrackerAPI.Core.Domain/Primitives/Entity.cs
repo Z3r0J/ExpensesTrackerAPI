@@ -9,7 +9,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
 
     protected Entity() { }
 
-    public TId Id { get; private init; }
+    public TId Id { get; private init; } = default!;
     public DateTime? CreatedOnUtc { get; set; }
     public DateTime? UpdateOnUtc { get; set; }
 
@@ -35,7 +35,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
             return false;
         }
 
-        return entity.Id.Equals(Id);
+        return entity.Id is not null && entity.Id.Equals(Id);
     }
 
     public bool Equals(Entity<TId>? other)
@@ -50,11 +50,13 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
             return false;
         }
 
-        return other.Id.Equals(Id);
+        return other.Id is not null && other.Id.Equals(Id);
     }
 
     public override int GetHashCode()
     {
-        return Id.GetHashCode() * 41;
+        if (Id is not null) return Id.GetHashCode() * 41;
+
+        return GetHashCode();
     }
 }

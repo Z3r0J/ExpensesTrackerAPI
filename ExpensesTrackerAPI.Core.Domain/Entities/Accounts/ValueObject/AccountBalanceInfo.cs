@@ -5,6 +5,11 @@ namespace ExpensesTrackerAPI.Core.Domain.Entities.Accounts.ValueObject;
 
 public record AccountBalanceInfo(Money TotalAmount)
 {
+    public AccountBalanceInfo() : this(Money.Zero())
+    {
+        
+    }
+
     public Money CurrentAmount { get; private set; } = Money.Zero();
 
     public static AccountBalanceInfo None = new(Money.Zero());
@@ -29,20 +34,20 @@ public record AccountBalanceInfo(Money TotalAmount)
         return CurrentAmount.Amount >= TotalAmount.Amount;
     }
 
-    public void UpdateCurrentAmount(TransactionType transactionType, Money Amount)
+    public void UpdateCurrentAmount(TransactionType transactionType, Money amount)
     {
-        if (Amount.Currency != TotalAmount.Currency)
+        if (amount.Currency != TotalAmount.Currency)
         {
-            Amount = Amount.ConvertTo(TotalAmount.Currency, 1);
+            amount = amount.ConvertTo(TotalAmount.Currency, 1);
         }
 
         if (transactionType == TransactionType.Expense)
         {
-            CurrentAmount -= Amount;
+            CurrentAmount -= amount;
         }
         else
         {
-            CurrentAmount += Amount;
+            CurrentAmount += amount;
         }
     }
 }
